@@ -1,10 +1,9 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, redirect, render
-
 from blog.forms import CommentForm, PostForm, ProfileForm
 from blog.models import Category, Comment, Post
 from blog.utils import posts_pagination, query_post
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404, redirect, render
 
 
 def index(request):

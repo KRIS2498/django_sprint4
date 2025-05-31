@@ -1,7 +1,8 @@
-from django.urls import include, path
-from .views import AboutPageView, RulesPageView
 import debug_toolbar
 from django.conf import settings
+from django.urls import include, path
+
+from .views import AboutPageView, RulesPageView
 
 app_name = 'pages'
 

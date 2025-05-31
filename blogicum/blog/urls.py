@@ -1,6 +1,6 @@
-from django.urls import include, path
 import debug_toolbar
 from blog import views
+from django.urls import include, path
 
 app_name = 'blog'
 
