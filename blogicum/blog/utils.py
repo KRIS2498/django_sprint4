@@ -23,7 +23,7 @@ def query_post(
     if filters:
         queryset = queryset.filter(
             is_published=True,
-            pub_date__lt=timezone.now(),
+            pub_date__lte=timezone.now(),
             category__is_published=True
         )
     if with_comments:

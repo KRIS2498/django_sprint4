@@ -1,6 +1,4 @@
-import debug_toolbar
-from django.conf import settings
-from django.urls import include, path
+from django.urls import path
 
 from .views import AboutPageView, RulesPageView
 
@@ -13,7 +11,3 @@ urlpatterns = [
     path('about/', AboutPageView.as_view(), name='about'),
     path('rules/', RulesPageView.as_view(), name='rules'),
 ]
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]

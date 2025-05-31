@@ -4,6 +4,9 @@ from blog.utils import posts_pagination, query_post
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.http import Http404
+from django.db.models import Count
 
 
 def index(request):
@@ -29,10 +32,11 @@ def category_posts(request, category_slug):
 
 
 def post_detail(request, post_id):
-
     post = get_object_or_404(Post, id=post_id)
-    if post.author != request.user:
-        post = get_object_or_404(query_post(), id=post_id)
+    if post.author != request.user and not (
+        post.is_published and post.pub_date <= timezone.now()
+    ):
+        raise Http404("Post not found")
     comments = post.comments.order_by('created_at')
     form = CommentForm()
     context = {
@@ -85,12 +89,19 @@ def delete_post(request, post_id):
 
 
 def profile(request, username):
-
     profile = get_object_or_404(User, username=username)
-    posts = query_post(manager=profile.posts, filters=profile != request.user)
+    posts = profile.posts.annotate(
+        comment_count=Count('comments')).order_by('-pub_date')
+    if profile != request.user:
+        posts = posts.filter(
+            is_published=True,
+            pub_date__lte=timezone.now()
+        )
     page_obj = posts_pagination(request, posts)
-    context = {'profile': profile,
-               'page_obj': page_obj}
+    context = {
+        'profile': profile,
+        'page_obj': page_obj
+    }
     return render(request, 'blog/profile.html', context)
 
 
