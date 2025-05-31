@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import include, path, reverse_lazy
 from django.views.generic.edit import CreateView
-
+import debug_toolbar
 from blogicum import settings
 
 handler404 = 'pages.views.page_not_found'
@@ -35,6 +35,7 @@ urlpatterns = [
         name='registration'),
     path('admin/', admin.site.urls),
     path('', include('blog.urls', namespace='blog')),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 
