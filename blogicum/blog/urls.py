@@ -4,6 +4,9 @@ from blog import views
 
 app_name = 'blog'
 
+handler404 = 'pages.views.page_not_found'
+handler500 = 'pages.views.server_error'
+
 posts = [
     path('<int:post_id>/', views.post_detail, name='post_detail'),
     path('__debug__/', include(debug_toolbar.urls)),
