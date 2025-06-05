@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.http import Http404
-from django.db.models import Count
 
 
 def index(request):
@@ -90,8 +89,8 @@ def delete_post(request, post_id):
 
 def profile(request, username):
     profile = get_object_or_404(User, username=username)
-    posts = profile.posts.annotate(
-        comment_count=Count('comments')).order_by('-pub_date')
+    posts = query_post(
+        manager=profile.posts, filters=(profile != request.user))
     if profile != request.user:
         posts = posts.filter(
             is_published=True,
